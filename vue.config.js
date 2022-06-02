@@ -4,7 +4,7 @@ module.exports = defineConfig({
   devServer:{
     proxy:{
       '/api':{
-        target: 'https://api.imooc-admin.lgdsunday.club/',
+        target: 'http://127.0.0.1/lovelylm',
         changeOrigin: true,
       }
     }

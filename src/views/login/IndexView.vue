@@ -33,12 +33,13 @@
               :prefix-icon="Lock"
           />
         </el-form-item>
-        <div class="leiming">
+        <div class="rememberPassword">
           <el-checkbox v-model="rememberPassword" label="记住密码" size="default"/>
           <el-link type="primary">忘记密码</el-link>
         </div>
       </div>
-      <el-button class="login-button" @click="login(loginFormRef)" v-model:loading="loading" type="primary">登录</el-button>
+      <el-button class="login-button" @click="login" v-model:loading="loading" type="primary">登录
+      </el-button>
     </el-form>
 
   </div>
@@ -49,8 +50,9 @@
 <script setup>
 import {ref} from 'vue'
 // import {ElMessage,} from "element-plus";
-import { useStore } from "vuex"
+import {useStore} from "vuex"
 import {Lock, User} from '@element-plus/icons-vue'
+
 let loading = ref(null)
 let rememberPassword = ref(false)
 const store = useStore()
@@ -64,16 +66,12 @@ const validatePass = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('密码不能为空！'))
   }
-  setTimeout(() => {
-    if (value.length < 11) {
-      callback(new Error('密码至少为11位！'))
-    } else if (value.length > 100) {
-      callback(new Error('密码不能超过100位！'))
-    }
-
-    callback()
-
-  }, 1000)
+  if (value.length < 11) {
+    callback(new Error('密码至少为11位！'))
+  } else if (value.length > 100) {
+    callback(new Error('密码不能超过100位！'))
+  }
+  callback()
 }
 const loginRules = ref({
   username: [
@@ -92,17 +90,17 @@ const loginRules = ref({
 
 
 const login = () => {
-  loginFormRef.value.validate(valid =>{
+  loginFormRef.value.validate(valid => {
     if (valid) {
       loading.value = true;
       store.dispatch('user/login', loginFrom.value)
-      .then(() => {
-        loading.value = false;
-      }).catch(error => {
+          .then(() => {
+            loading.value = false;
+          }).catch(error => {
         console.log(error);
         loading.value = false;
       })
-    }else {
+    } else {
       console.log("失败")
     }
   })
@@ -114,7 +112,6 @@ const login = () => {
 body {
   background: url(../../assets/wallpaper.jpg) no-repeat;
   background-size: cover;
-  background-attachment: fixed;
 }
 
 .login-container {
@@ -143,7 +140,7 @@ body {
   margin-top: 50px;
 }
 
-.leiming {
+.rememberPassword {
 
   justify-content: space-between;
   display: flex;
